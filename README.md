@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORMULIR PENDAFTARAN LPSDMEDOCOM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0077b6 0%, #ffffff 100%);
+            background-attachment: fixed;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            width: 100%; max-width: 500px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden;
+        }
+        .header { text-align: center; padding: 20px; background: #fff; }
+        .logo { width: 80px; margin-bottom: 5px; }
+        .banner { width: 100%; height: 200px; object-fit: cover; border-bottom: 5px solid #00b4d8; }
+        .content { padding: 30px; }
+        h2 { color: #03045e; text-align: center; font-size: 1.2rem; margin-bottom: 25px; text-transform: uppercase; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.8rem; font-weight: 700; color: #0077b6; margin-bottom: 6px; }
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 2px solid #caf0f8; border-radius: 12px; 
+            font-family: inherit; font-size: 0.9rem; background: #f8fbff;
+        }
+        .flex-row { display: flex; gap: 15px; }
+        .flex-row div { flex: 1; }
+        button {
+            width: 100%; padding: 16px; background: linear-gradient(45deg, #0077b6, #00b4d8); 
+            color: white; border: none; border-radius: 12px; font-weight: 700; 
+            font-size: 1rem; cursor: pointer; margin-top: 15px; transition: 0.4s;
+            text-transform: uppercase; box-shadow: 0 10px 20px rgba(0,119,182,0.2);
+        }
+        button:hover { filter: brightness(1.1); transform: translateY(-3px); }
+        @media (max-width: 480px) { .flex-row { flex-direction: column; gap: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <img src="WhatsApp Image 2025-12-21 at 08.27.55.jpeg" alt="Logo LPSDMEDOCOM" class="logo">
+    </div>
+    <img src="edocomm.jpg" alt="Kegiatan Kursus" class="banner">
+
+    <div class="content">
+        <h2>Pendaftaran Kursus</h2>
+        
+        <form id="formPendaftaran" action="https://formspree.io/f/xgowkjwr" method="POST">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="Nama_Lengkap" placeholder="Masukkan nama" required>
+            </div>
+
+            <div class="flex-row">
+                <div class="form-group">
+                    <label>Umur</label>
+                    <input type="number" name="Umur" required>
+                </div>
+                <div class="form-group">
+                    <label>No. WA Pribadi</label>
+                    <input type="tel" name="WA_Pribadi" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Alamat Lengkap</label>
+                <textarea name="Alamat" rows="2" required></textarea>
+            </div>
+
+            <div class="flex-row">
+                <div class="form-group">
+                    <label>Nama Ibu Kandung</label>
+                    <input type="text" name="Nama_Ibu" required>
+                </div>
+                <div class="form-group">
+                    <label>No. HP Orang Tua</label>
+                    <input type="tel" name="WA_Orang_Tua" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kelas yang Diikuti</label>
+                <input type="text" name="Kelas_Pilihan" required>
+            </div>
+
+            <div class="form-group">
+                <label>Tipe Kursus</label>
+                <select name="Tipe_Program" required>
+                    <option value="Reguler">Reguler</option>
+                    <option value="Privat">Privat</option>
+                </select>
+            </div>
+
+            <button type="submit" id="submitBtn">KIRIM PENDAFTARAN</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('formPendaftaran');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "Sedang Mengirim...";
+
+        const formData = new FormData(form);
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Terima kasih sudah mendaftar di LPSDMEDOCOM. Data Anda telah kami terima.',
+                    icon: 'success',
+                    confirmButtonText: 'TUTUP',
+                    confirmButtonColor: '#0077b6'
+                }).then(() => {
+                    // Mencoba menutup tab/window secara otomatis
+                    window.close();
+                    
+                    // Jika window.close tidak diizinkan oleh browser (karena alasan keamanan), 
+                    // arahkan ke halaman kosong atau halaman utama
+                    setTimeout(() => {
+                        window.location.href = "about:blank";
+                    }, 500);
+                });
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Terjadi kesalahan. Silakan coba lagi.', 'error');
+            btn.disabled = false;
+            btn.innerText = "KIRIM PENDAFTARAN";
+        }
+    });
+</script>
+
+</body>
+</html>
